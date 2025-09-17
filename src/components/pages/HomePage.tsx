@@ -39,9 +39,21 @@ export function HomePage() {
 
 	const communityInfo = communityInfoData?.[0]?.value;
 
-	const projectGoal = 50000;
-	const currentAmount = 32000;
+	// Fetch project progress (dynamic)
+	const {
+		data: projectData,
+		loading: projectLoading,
+		error: projectError,
+	} = useApiOnMount(() => SupabaseContentService.getProjectProgress());
+
+	// Extract project progress info, with fallbacks
+	const projectProgress =
+		projectData && projectData[0]?.value ? projectData[0].value : {};
+	const projectGoal = projectProgress.target || 50000;
+	const currentAmount = projectProgress.raised || 32000;
 	const progressPercentage = Math.round((currentAmount / projectGoal) * 100);
+	const contributors = projectProgress.contributors || 150;
+	const monthsTimeline = projectProgress.monthsTimeline || 18;
 
 	// Icon mapping for values
 	const getIconComponent = (iconName: string) => {
@@ -59,40 +71,23 @@ export function HomePage() {
 	const projectGoals = [
 		{
 			icon: Building2,
-			title: "Establish a large masjid with comprehensive facilities",
-			description:
-				"Creating a spacious worship center for our growing community",
+			title: "Establish a large Mosque with all facilities",
 		},
 		{
 			icon: Heart,
-			title: "Provide funeral services for the deceased",
-			description: "Offering dignified Islamic funeral services and support",
+			title: "Comprehensive Islamic center for future generations",
 		},
 		{
 			icon: GraduationCap,
-			title: "Create separate fulltime madrashas for boys and girls",
-			description: "Comprehensive Islamic education in dedicated facilities",
+			title: "Develop a senior care facility and outreach program",
 		},
 		{
 			icon: BookOpen,
-			title: "Offer afternoon Islamic schools for all grades",
-			description: "After-school Islamic education programs for children",
+			title: "Support Center for New Immigrants & Revert Muslims",
 		},
 		{
 			icon: Users,
-			title: "Implement full time and part time Tahfiz programs",
-			description:
-				"Quran memorization programs for different commitment levels",
-		},
-		{
-			icon: Baby,
-			title: "Develop orphanage care and outreach program",
-			description: "Supporting orphaned children and vulnerable families",
-		},
-		{
-			icon: HandHeart,
-			title: "Organize social and community service initiatives",
-			description: "Building bridges and serving the wider community",
+			title: "Provide funeral services for the deceased",
 		},
 	];
 
@@ -114,18 +109,37 @@ export function HomePage() {
 						</p>
 					</div>
 
-					<div className="grid lg:grid-cols-3 gap-12 items-start">
-						{/* Progress Section */}
-						<div className="lg:col-span-2">
-							<Card className="shadow-lg border-0">
-								<CardHeader className="text-center pb-6">
-									<div className="text-5xl font-light text-green-600 mb-2">
-										${currentAmount.toLocaleString()}
-									</div>
-									<div className="text-lg text-gray-600">
-										raised of ${projectGoal.toLocaleString()} goal
-									</div>
-								</CardHeader>
+					<div className="grid lg:grid-cols-3 gap-12 items-start lg:h-[480px]">
+						{/* Progress Section (Dynamic) */}
+						<div className="lg:col-span-2 flex flex-col h-full">
+							<Card className="shadow-lg border-0 h-full flex flex-col justify-between">
+								{projectError ? (
+									<CardHeader className="text-center pb-6">
+										<div className="text-red-600 text-lg mb-2">
+											Unable to load project data. Showing default information.
+										</div>
+										<div className="text-xl font-light text-green-600 mb-2">
+											${currentAmount.toLocaleString()}
+										</div>
+										<div className="text-lg text-gray-600">
+											raised of ${projectGoal.toLocaleString()} goal
+										</div>
+									</CardHeader>
+								) : projectLoading ? (
+									<CardHeader className="text-center pb-6">
+										<div className="h-10 bg-gray-200 rounded animate-pulse mb-2 w-1/2 mx-auto"></div>
+										<div className="h-6 bg-gray-100 rounded animate-pulse w-1/3 mx-auto"></div>
+									</CardHeader>
+								) : (
+									<CardHeader className="text-center pb-6">
+										<div className="text-5xl font-light text-green-600 mb-2">
+											${currentAmount.toLocaleString()}
+										</div>
+										<div className="text-lg text-gray-600">
+											raised of ${projectGoal.toLocaleString()} goal
+										</div>
+									</CardHeader>
+								)}
 								<CardContent className="space-y-6">
 									<div className="space-y-2">
 										<div className="flex justify-between text-sm font-medium">
@@ -138,7 +152,7 @@ export function HomePage() {
 									<div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
 										<div className="bg-blue-50 rounded-xl p-4">
 											<div className="text-2xl font-light text-blue-600 mb-1">
-												150+
+												{contributors}+
 											</div>
 											<div className="text-gray-600 text-sm font-medium">
 												Contributors
@@ -146,7 +160,7 @@ export function HomePage() {
 										</div>
 										<div className="bg-purple-50 rounded-xl p-4">
 											<div className="text-2xl font-light text-purple-600 mb-1">
-												18
+												{monthsTimeline}
 											</div>
 											<div className="text-gray-600 text-sm font-medium">
 												Months Timeline
@@ -158,30 +172,6 @@ export function HomePage() {
 											</div>
 											<div className="text-gray-600 text-sm font-medium">
 												Remaining
-											</div>
-										</div>
-										<div className="bg-green-50 rounded-xl p-4">
-											<div className="text-2xl font-light text-green-600 mb-1">
-												300+
-											</div>
-											<div className="text-gray-600 text-sm font-medium">
-												Prayer Capacity
-											</div>
-										</div>
-										<div className="bg-red-50 rounded-xl p-4">
-											<div className="text-2xl font-light text-red-600 mb-1">
-												5
-											</div>
-											<div className="text-gray-600 text-sm font-medium">
-												Construction Phases
-											</div>
-										</div>
-										<div className="bg-indigo-50 rounded-xl p-4">
-											<div className="text-2xl font-light text-indigo-600 mb-1">
-												500+
-											</div>
-											<div className="text-gray-600 text-sm font-medium">
-												Volunteer Hours
 											</div>
 										</div>
 									</div>
@@ -210,8 +200,8 @@ export function HomePage() {
 						</div>
 
 						{/* Project Goals Sidebar */}
-						<div className="lg:col-span-1">
-							<Card className="shadow-lg border-0 bg-gradient-to-br from-green-50 to-emerald-50">
+						<div className="lg:col-span-1 flex flex-col h-full">
+							<Card className="shadow-lg border-0 bg-gradient-to-br from-green-50 to-emerald-50 h-full flex flex-col justify-between">
 								<CardHeader>
 									<CardTitle className="text-xl text-green-900">
 										Project Goals
@@ -498,7 +488,10 @@ export function HomePage() {
 						</div>
 						<div>
 							<div className="text-4xl font-light text-orange-600 mb-3">
-								$32K
+								$
+								{currentAmount >= 1000
+									? (currentAmount / 1000).toFixed(1).replace(/\.0$/, "") + "K"
+									: currentAmount}
 							</div>
 							<div className="text-gray-600 font-medium">
 								Mosque Fund Raised

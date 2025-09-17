@@ -55,10 +55,12 @@ export function MosqueProjectPage() {
 	} = useApiOnMount(() => SupabaseContentService.getDonationMethods());
 
 	// Extract project progress info, with fallbacks
-	const projectProgress = projectData[0]?.data?.[0]?.value || {};
+	const projectProgress =
+		projectData && projectData[0]?.value ? projectData[0].value : {};
 
 	// Extract donation methods from API, with fallbacks
-	const apiDonationMethods = donationData[0]?.data?.[0]?.value || [];
+	const apiDonationMethods =
+		(donationData && donationData[0]?.data?.[0]?.value) || [];
 
 	// Use API data with fallbacks to static data
 	const projectGoal = projectProgress.target || 50000;

@@ -400,16 +400,7 @@ try {
   console.error('Failed to fetch events:', error.message);
 }
 
-// Get all content at once
-try {
-  const response = await SupabaseContentService.getAllContent();
-  const groupedContent = response.data.reduce((acc, item) => {
-    if (!acc[item.key]) acc[item.key] = [];
-    acc[item.key].push(item);
-    return acc;
-  }, {} as Record<string, ContentItem[]>);
-  console.log('All content grouped:', groupedContent);
-} catch (error) {
-  console.error('Failed to fetch all content:', error.message);
-}
 */
+
+// Re-export MediaCategory and MediaItem for external usage
+export type { MediaCategory, MediaItem };

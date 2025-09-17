@@ -1,4 +1,3 @@
-import image_79f28ada02b22a35859801d21c69cc22cc354345 from "figma:asset/79f28ada02b22a35859801d21c69cc22cc354345.png";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { useApiOnMount } from "../../lib/hooks/api-hooks";

@@ -1,157 +1,150 @@
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Button } from './ui/button';
-import { Badge } from './ui/badge';
-import { BookOpen, Users, Clock, Award, ArrowRight } from 'lucide-react';
-import { useRouter } from './Router';
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
+import { BookOpen, Users, Clock, Award, ArrowRight } from "lucide-react";
+import { useRouter } from "./Router";
 
 export function ProgramsSection() {
-  const { navigateTo } = useRouter();
-  
-  const programs = [
-    {
-      id: 1,
-      title: 'Beginner Quran Reading',
-      description: 'Learn to read Arabic and recite the Quran with proper tajweed. Perfect for newcomers to Islam or those wanting to improve their recitation.',
-      level: 'Beginner',
-      duration: '12 weeks',
-      schedule: 'Saturdays 10:00 AM - 12:00 PM',
-      instructor: 'Sheikh Ahmed Hassan',
-      capacity: '15 students',
-      price: 'Free',
-      features: ['Arabic alphabet', 'Basic tajweed rules', 'Short surahs', 'Prayer recitations'],
-      nextStart: 'March 1, 2025'
-    },
-    {
-      id: 2,
-      title: 'Advanced Quran Memorization',
-      description: 'Systematic memorization program for those who can already read Arabic. Focused on effective memorization techniques and retention.',
-      level: 'Advanced',
-      duration: 'Ongoing',
-      schedule: 'Tuesdays & Thursdays 7:00 PM - 8:30 PM',
-      instructor: 'Hafez Omar Malik',
-      capacity: '10 students',
-      price: '$50/month',
-      features: ['Memorization techniques', 'Review sessions', 'Individual attention', 'Progress tracking'],
-      nextStart: 'Ongoing enrollment'
-    },
-    {
-      id: 3,
-      title: 'Youth Islamic Studies',
-      description: 'Comprehensive Islamic education for youth aged 12-18, covering Quran, Hadith, Islamic history, and contemporary issues.',
-      level: 'All Levels',
-      duration: 'Academic year',
-      schedule: 'Sundays 1:00 PM - 3:00 PM',
-      instructor: 'Sister Fatima Al-Zahra',
-      capacity: '20 students',
-      price: '$30/month',
-      features: ['Islamic history', 'Hadith studies', 'Character building', 'Discussion groups'],
-      nextStart: 'September 2025'
-    },
-    {
-      id: 4,
-      title: 'Adult Islamic Education',
-      description: 'Weekly sessions covering fundamental Islamic knowledge, including aqeedah, fiqh, and practical Islamic living.',
-      level: 'All Levels',
-      duration: 'Ongoing',
-      schedule: 'Fridays after Maghrib',
-      instructor: 'Dr. Abdullah Rahman',
-      capacity: '25 students',
-      price: 'Donation-based',
-      features: ['Islamic jurisprudence', 'Practical guidance', 'Q&A sessions', 'Community discussion'],
-      nextStart: 'Join anytime'
-    }
-  ];
+	const { navigateTo } = useRouter();
 
-  const facilities = [
-    {
-      title: 'Main Prayer Hall',
-      description: 'Spacious prayer area accommodating up to 200 worshippers',
-      icon: '🕌'
-    },
-    {
-      title: 'Learning Center',
-      description: 'Dedicated classrooms with modern teaching equipment',
-      icon: '📚'
-    },
-    {
-      title: 'Library',
-      description: 'Extensive collection of Islamic books and resources',
-      icon: '📖'
-    },
-    {
-      title: 'Community Kitchen',
-      description: 'Fully equipped kitchen for community events and meals',
-      icon: '🍽️'
-    }
-  ];
+	const programs = [
+		{
+			id: 1,
+			title: `Qur’an Class for Boys`,
+			subtitle: "Beginner to Advance",
+			description: `A dedicated program for boys of all levels — including those who have never learned to read the Qur’an before — to learn Arabic reading skills and recite the Qur’an with proper tajweed. Whether starting from the alphabet, building fluency, or perfecting recitation, this class offers a supportive and encouraging environment to help every student progress with confidence and love for the Qur’an.`,
+			schedule: "Sundays, Tuesdays and Fridays 5:30 PM - 8:00 PM",
+			nextStart: "Anytime",
+			features: [
+				"Arabic alphabet",
+				"Correct pronunciation & articulation",
+				"Tajweed rules",
+				"Qur’an recitation",
+				"Qur’an memorization",
+				"Islamic reminders",
+			],
+			contact: "604-364-3260",
+		},
+		{
+			id: 2,
+			title: `Qur’an Class for Women and Girls`,
+			subtitle: "Beginner to Advance",
+			description: `A welcoming and supportive program for girls and women of all levels — including those who have never learned to read the Qur’an before — offering step-by-step guidance to develop Arabic reading skills and recite the Qur’an with proper tajweed. Whether you are starting from the basics, aiming to improve fluency, or perfecting your recitation, this class provides a respectful, motivating environment to help you build confidence, deepen your connection with the Qur’an, and grow spiritually.`,
+			schedule: "Sundays and Tuesdays 6:00 PM - 8:00 PM",
+			nextStart: "Anytime",
+			features: [
+				"Arabic alphabet",
+				"Correct pronunciation & articulation",
+				"Tajweed rules",
+				"Qur’an recitation",
+				"Qur’an memorization",
+				"Islamic reminders",
+			],
+			contact: "604-214-1390",
+		},
+		{
+			id: 3,
+			title: `Arabic Language Class for Kids`,
+			subtitle: "Beginner",
+			description: `A fun and interactive class designed to help children learn Arabic from the basics. Through engaging activities, kids will develop skills in reading, writing, and speaking while building a foundation to understand the Qur’an and Islamic studies.`,
+			schedule: "Saturdays 2:00 PM - 3:30 PM",
+			nextStart: "Anytime",
+			features: [
+				"Arabic alphabet & pronunciation",
+				"Reading skills",
+				"Writing skills",
+				"Speaking skills",
+				"Building foundation for Qur’an",
+			],
+			contact: "778-710-1774",
+		},
+		{
+			id: 4,
+			title: `English Language Class for Women`,
+			subtitle: "Beginner",
+			description: `This class is designed specifically for women who want to build their English step by step in a friendly and supportive environment. Together, we will learn the alphabet, practice basic conversation, and develop the essential skills of reading, writing, speaking, and listening.`,
+			schedule: "Saturdays 4:00 PM - 5:30 PM",
+			nextStart: "Anytime",
+			features: [
+				"Alphabet games and writing practice to strengthen reading and spelling",
+				"Role-plays and dialogues to practice everyday conversations",
+				"Listening exercises using short stories, songs, and simple videos",
+				"Group discussions and speaking activities to build confidence",
+				"Creative tasks such as writing short notes, filling forms, and simple journaling",
+			],
+			contact: "778-710-1774",
+		},
+	];
 
-  return (
-    <section id="programs" className="py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Programs Section */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-light text-gray-900 mb-8 tracking-tight">
-            Islamic Education Programs
-          </h2>
-          <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
-            Strengthen your faith through knowledge. Join our comprehensive Islamic education programs designed for all ages and experience levels.
-          </p>
-        </div>
+	return (
+		<section id="programs" className="py-24 bg-white">
+			<div className="max-w-7xl mx-auto px-6">
+				{/* Programs Section */}
+				<div className="text-center mb-16">
+					<h2 className="text-4xl font-light text-gray-900 mb-8 tracking-tight">
+						Islamic Education Programs
+					</h2>
+					<p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
+						Strengthen your faith through knowledge. Join our comprehensive
+						Islamic education programs designed for all ages and experience
+						levels.
+					</p>
+				</div>
 
-        <div className="grid lg:grid-cols-2 gap-8 mb-16">
-          {programs.slice(0, 2).map((program) => (
-            <Card key={program.id} className="hover:shadow-lg transition-shadow">
-              <CardHeader className="pb-4">
-                <div className="flex justify-between items-start mb-2">
-                  <CardTitle className="text-xl">{program.title}</CardTitle>
-                  <Badge variant={program.level === 'Beginner' ? 'secondary' : program.level === 'Advanced' ? 'default' : 'outline'}>
-                    {program.level}
-                  </Badge>
-                </div>
-                <p className="text-gray-600">{program.description}</p>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid sm:grid-cols-2 gap-4 text-sm">
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-green-600" />
-                    <span>{program.duration}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Users className="h-4 w-4 text-green-600" />
-                    <span>{program.capacity}</span>
-                  </div>
-                </div>
-                
-                <div className="space-y-2 text-sm">
-                  <p><strong>Schedule:</strong> {program.schedule}</p>
-                  <p><strong>Instructor:</strong> {program.instructor}</p>
-                  <p><strong>Fee:</strong> {program.price}</p>
-                  <p><strong>Next Start:</strong> {program.nextStart}</p>
-                </div>
+				<div className="grid lg:grid-cols-2 gap-8 mb-16">
+					{programs.map((program) => (
+						<Card
+							key={program.id}
+							className="hover:shadow-lg transition-shadow"
+						>
+							<CardHeader className="pb-4">
+								<CardTitle className="text-2xl font-semibold mb-1">
+									{program.title}
+								</CardTitle>
+								{program.subtitle && (
+									<div className="text-green-700 text-base font-medium mb-2">
+										{program.subtitle}
+									</div>
+								)}
+								<p className="text-gray-700 mb-4">{program.description}</p>
+							</CardHeader>
+							<CardContent className="space-y-4">
+								<div className="space-y-2 text-sm">
+									<p>
+										<strong>Schedule:</strong> {program.schedule}
+									</p>
+									<p>
+										<strong>Start:</strong> {program.nextStart}
+									</p>
+									{program.contact && (
+										<p>
+											<strong>Contact:</strong>{" "}
+											<a
+												href={`tel:${program.contact}`}
+												className="text-green-700 underline"
+											>
+												{program.contact}
+											</a>
+										</p>
+									)}
+								</div>
 
-                <div>
-                  <h4 className="font-semibold mb-2">What You'll Learn:</h4>
-                  <ul className="text-sm text-gray-600 space-y-1">
-                    {program.features.map((feature, index) => (
-                      <li key={index} className="flex items-center gap-2">
-                        <ArrowRight className="h-3 w-3 text-green-600" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <Button className="w-full bg-green-600 hover:bg-green-700">
-                  <BookOpen className="h-4 w-4 mr-2" />
-                  Enroll Now
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-
-      </div>
-    </section>
-  );
+								<div>
+									<h4 className="font-semibold mb-2">What You'll Learn:</h4>
+									<ul className="text-sm text-gray-600 space-y-1">
+										{program.features.map((feature, index) => (
+											<li key={index} className="flex items-center gap-2">
+												<ArrowRight className="h-3 w-3 text-green-600" />
+												{feature}
+											</li>
+										))}
+									</ul>
+								</div>
+							</CardContent>
+						</Card>
+					))}
+				</div>
+			</div>
+		</section>
+	);
 }
