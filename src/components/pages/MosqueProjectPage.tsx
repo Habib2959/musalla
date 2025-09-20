@@ -59,8 +59,7 @@ export function MosqueProjectPage() {
 		projectData && projectData[0]?.value ? projectData[0].value : {};
 
 	// Extract donation methods from API, with fallbacks
-	const apiDonationMethods =
-		(donationData && donationData[0]?.data?.[0]?.value) || [];
+	const apiDonationMethods = (donationData && donationData[0]?.value) || [];
 
 	// Use API data with fallbacks to static data
 	const projectGoal = projectProgress.target || 50000;
@@ -308,7 +307,7 @@ export function MosqueProjectPage() {
 					<h1 className="text-5xl md:text-6xl font-light mb-8 tracking-tight">
 						Building Our Sacred
 						<br />
-						<span className="text-green-200">Masjid</span>
+						<span className="text-green-200">Mosque</span>
 					</h1>
 					<p className="text-xl md:text-2xl max-w-3xl mx-auto mb-12 leading-relaxed font-light">
 						A comprehensive Islamic center serving as a beacon of faith,
@@ -321,9 +320,7 @@ export function MosqueProjectPage() {
 							<MapPin className="h-5 w-5" />
 							<div>
 								<p className="font-medium">New Location</p>
-								<p className="text-sm text-green-100">
-									8879 Selkirk Street, Vancouver, BC V6P 4J6
-								</p>
+								<p className="text-sm text-green-100">Marpole, Vancouver</p>
 							</div>
 						</div>
 					</div>
@@ -338,57 +335,40 @@ export function MosqueProjectPage() {
 						<div className="lg:col-span-3">
 							<div className="mb-6">
 								<Badge className="bg-green-100 text-green-800 hover:bg-green-200 mb-4">
-									SACRED PROJECT OVERVIEW
+									Our Aspiration for the Ummah
 								</Badge>
 								<h2 className="text-4xl font-light mb-6 tracking-tight">
-									A Vision for Our
+									Help Us Build
 									<br />
-									<span className="text-green-600">Islamic Community</span>
+									<span className="text-green-600">the House of Allah</span>
 								</h2>
 							</div>
 
 							<div className="space-y-6 text-lg text-gray-700 leading-relaxed mb-8">
 								<p>
-									New Westminster Islamic Society (NWMIS) has acquired a blessed
-									property to establish one of the largest Masjids in North
-									America, InshāAllāh.
+									The New Westminster Islamic Society (NWMIS) is actively
+									seeking a permanent property near Marpole, Vancouver, BC,
+									Canada, to establish a mosque and permanent Islamic centre
+									that will serve as a beacon of faith and community for
+									generations, InshāAllāh.
 								</p>
 								<p>
-									This ambitious project, guided by Allah's grace, aims to
-									create a comprehensive Islamic center that will serve as a
-									beacon of faith, knowledge, and community service for
-									generations to come.
+									With the help of Allah ﷻ, this Masjid will become a vibrant
+									centre that nurtures Islamic values, promotes lifelong
+									learning, and provides essential services to Muslims across
+									Greater Vancouver and beyond. The Prophet ﷺ said: “Whoever
+									builds a mosque for the sake of Allah, Allah will build for
+									him a house in Paradise.” (Sahih Bukhari). Donate generously
+									and invest in your home in Paradise.
 								</p>
 								<p>
-									With the acquisition of this strategically located property in
-									the heart of Vancouver, we are working toward creating a space
-									that will nurture Islamic values, provide quality education,
-									and strengthen the bonds of our Ummah in the Greater Lower
-									Mainland of British Columbia.
+									Our vision is to create a welcoming place of worship, a centre
+									of excellence for Islamic education, and a gathering space
+									where families and individuals can connect, grow, and
+									contribute positively to society. This Masjid will stand as a
+									landmark reflecting the beauty of Islam and the strength of a
+									united Ummah.
 								</p>
-							</div>
-
-							{/* Mission and Vision Cards */}
-							<div className="grid md:grid-cols-2 gap-6">
-								{visionPoints.map((point, index) => (
-									<Card key={index} className="border-0 shadow-sm">
-										<CardContent className="p-6">
-											<div className="flex items-start gap-4">
-												<div className="bg-green-100 rounded-lg p-3">
-													<point.icon className="h-6 w-6 text-green-600" />
-												</div>
-												<div>
-													<h3 className="font-medium text-gray-900 mb-2">
-														{point.title}
-													</h3>
-													<p className="text-sm text-gray-600 leading-relaxed">
-														{point.description}
-													</p>
-												</div>
-											</div>
-										</CardContent>
-									</Card>
-								))}
 							</div>
 						</div>
 
@@ -482,7 +462,7 @@ export function MosqueProjectPage() {
 											Support the Mosque
 										</Button>
 										<Button
-											onClick={() => navigateTo("donate")}
+											onClick={() => navigateTo("mosque-project")}
 											size="lg"
 											variant="outline"
 											className="flex-1 border-2 border-green-600 text-green-600 hover:bg-green-50 text-lg py-6 rounded-full transition-all duration-300 hover:scale-105"
@@ -501,22 +481,6 @@ export function MosqueProjectPage() {
 			{/* Building Our Islamic Community Center - Combined Goals and Features */}
 			<section className="py-20 bg-gray-50">
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-					<div className="text-center mb-16">
-						<Badge className="bg-green-100 text-green-800 hover:bg-green-200 mb-4">
-							COMPREHENSIVE VISION
-						</Badge>
-						<h2 className="text-4xl font-light mb-6 tracking-tight">
-							Building Our Islamic
-							<br />
-							<span className="text-green-600">Community Center</span>
-						</h2>
-						<p className="text-lg text-gray-600 max-w-3xl mx-auto">
-							Our comprehensive vision for a modern Islamic center that serves
-							Allah and strengthens our Ummah through worship, education, and
-							community services
-						</p>
-					</div>
-
 					{/* Project Goals from HomePage as a Card */}
 					<div className="mb-16">
 						<Card className="shadow-lg border-0 bg-gradient-to-br from-green-50 to-emerald-50">
@@ -1004,7 +968,7 @@ export function MosqueProjectPage() {
 								size="lg"
 								onClick={() => navigateTo("contact")}
 								variant="outline"
-								className="border-2 border-white text-white hover:bg-white hover:text-green-700 px-8 py-4 h-14 rounded-full font-medium"
+								className="border-2 border-white text-white bg-transparent hover:bg-white hover:text-green-700 px-8 py-4 h-14 rounded-full font-medium"
 							>
 								<Phone className="mr-2 h-5 w-5" />
 								Contact Us

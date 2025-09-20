@@ -40,15 +40,6 @@ export function SubscribePage() {
 
 	const subscriptionTypes = [
 		{
-			id: "weekly-newsletter",
-			icon: Mail,
-			title: "Weekly Newsletter",
-			description:
-				"Stay updated with community news, events, and Islamic reminders",
-			frequency: "Weekly",
-			color: "bg-blue-500",
-		},
-		{
 			id: "upcoming-events",
 			icon: Calendar,
 			title: "Event Notifications",

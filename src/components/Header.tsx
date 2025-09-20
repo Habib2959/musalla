@@ -3,10 +3,26 @@ import { Button } from "./ui/button";
 import { Menu, X } from "lucide-react";
 import { useRouter } from "./Router";
 import logo from "../assets/logo.png";
+import { useApiOnMount, SupabaseContentService } from "../lib";
 
 export function Header() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const { currentPage, navigateTo } = useRouter();
+	// Fetch project progress (dynamic)
+	const {
+		data: projectData,
+		loading: projectLoading,
+		error: projectError,
+	} = useApiOnMount(() => SupabaseContentService.getProjectProgress());
+
+	// Extract project progress info, with fallbacks
+	const projectProgress =
+		projectData && projectData[0]?.value ? projectData[0].value : {};
+	const projectGoal = projectProgress.target || 50000;
+	const currentAmount = projectProgress.raised || 32000;
+	const progressPercentage = Math.round((currentAmount / projectGoal) * 100);
+	const contributors = projectProgress.contributors || 150;
+	const monthsTimeline = projectProgress.monthsTimeline || 18;
 
 	const handleNavigation = (
 		page:
@@ -196,7 +212,10 @@ export function Header() {
 					<div className="flex items-center justify-center text-center">
 						<p className="text-sm text-green-800">
 							<span className="font-medium">New Mosque Project:</span>
-							<span className="mx-2">$32,000 raised of $50,000 goal</span>
+							<span className="mx-2">
+								${currentAmount.toLocaleString()} raised of $
+								{projectGoal.toLocaleString()} goal
+							</span>
 							<button
 								onClick={() => handleNavigation("mosque-project")}
 								className="text-green-700 hover:text-green-900 font-medium underline underline-offset-2 transition-colors duration-200"

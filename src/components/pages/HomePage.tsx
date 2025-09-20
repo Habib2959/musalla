@@ -178,7 +178,7 @@ export function HomePage() {
 
 									<div className="flex flex-col sm:flex-row gap-4 pt-4">
 										<Button
-											onClick={() => navigateTo("mosque-project")}
+											onClick={() => navigateTo("donate")}
 											size="lg"
 											className="flex-1 bg-green-600 hover:bg-green-700 text-lg py-6 rounded-full transition-all duration-300 hover:scale-105"
 										>
@@ -201,7 +201,7 @@ export function HomePage() {
 
 						{/* Project Goals Sidebar */}
 						<div className="lg:col-span-1 flex flex-col h-full">
-							<Card className="shadow-lg border-0 bg-gradient-to-br from-green-50 to-emerald-50 h-full flex flex-col justify-between">
+							<Card className="shadow-lg border-0 bg-white h-full flex flex-col justify-between">
 								<CardHeader>
 									<CardTitle className="text-xl text-green-900">
 										Project Goals

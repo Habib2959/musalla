@@ -330,7 +330,7 @@ export function EventsPage() {
 			</section>
 
 			{/* Upcoming Highlights */}
-			<section className="py-16 bg-green-50">
+			{/* <section className="py-16 bg-green-50">
 				<div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 					<h2 className="text-3xl text-center text-gray-900 mb-8">
 						Event Calendar Highlights
@@ -361,7 +361,7 @@ export function EventsPage() {
 						</div>
 					</div>
 				</div>
-			</section>
+			</section> */}
 
 			{/* Previous Events Photo Gallery */}
 			<section className="py-16">
