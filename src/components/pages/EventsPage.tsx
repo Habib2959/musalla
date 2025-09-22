@@ -1,4 +1,25 @@
 import { useState } from "react";
+import {
+	Dialog,
+	DialogTrigger,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+	DialogFooter,
+	DialogClose,
+} from "../ui/dialog";
+import {
+	Form,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormControl,
+	FormMessage,
+} from "../ui/form";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { useForm } from "react-hook-form";
+import { useApi } from "../../lib/hooks/api-hooks";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { useApiOnMount } from "../../lib/hooks/api-hooks";
 import { SupabaseContentService } from "../../lib/services/supabase-content.service";
@@ -20,6 +41,43 @@ import {
 } from "lucide-react";
 
 export function EventsPage() {
+	const [open, setOpen] = useState(false);
+
+	// Form for event proposal
+	const form = useForm({
+		defaultValues: {
+			title: "",
+			dateTime: "",
+			location: "",
+			frequency: "",
+			type: "one-time",
+			tags: [],
+			description: "",
+			notes: "",
+			proposerName: "",
+			proposerEmail: "",
+			proposerPhone: "",
+		},
+	});
+
+	const {
+		execute,
+		loading: submitting,
+		error: submitError,
+		data: submitData,
+	} = useApi();
+
+	async function onSubmit(values) {
+		const body = {
+			new_proposal: {
+				...values,
+				submittedAt: new Date().toISOString(),
+			},
+		};
+		await execute(() => SupabaseContentService.addEventProposal(body));
+		form.reset();
+		setOpen(false);
+	}
 	const [photoFilter, setPhotoFilter] = useState("All");
 	const [videoFilter, setVideoFilter] = useState("All");
 	const [eventFilter, setEventFilter] = useState("All");
@@ -604,9 +662,204 @@ export function EventsPage() {
 						Have an Islamic event you'd like to share with our community? Let us
 						know!
 					</p>
-					<Button size="lg" className="bg-green-600 hover:bg-green-700">
-						Submit Event Proposal
-					</Button>
+					{/* Event Proposal Modal */}
+					<Dialog open={open} onOpenChange={setOpen}>
+						<DialogTrigger asChild>
+							<Button size="lg" className="bg-green-600 hover:bg-green-700">
+								Submit Event Proposal
+							</Button>
+						</DialogTrigger>
+						<DialogContent>
+							<DialogHeader>
+								<DialogTitle>Submit Event Proposal</DialogTitle>
+							</DialogHeader>
+							<Form {...form}>
+								<form
+									onSubmit={form.handleSubmit(onSubmit)}
+									className="space-y-4"
+								>
+									<FormField
+										name="title"
+										control={form.control}
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Title</FormLabel>
+												<FormControl>
+													<Input {...field} required />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										name="dateTime"
+										control={form.control}
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Date & Time</FormLabel>
+												<FormControl>
+													<Input type="datetime-local" {...field} required />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										name="location"
+										control={form.control}
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Location</FormLabel>
+												<FormControl>
+													<Input {...field} required />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										name="type"
+										control={form.control}
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Type</FormLabel>
+												<FormControl>
+													<select
+														{...field}
+														className="w-full border rounded-md px-3 py-2"
+													>
+														<option value="one-time">One-time</option>
+														<option value="recurring">Recurring</option>
+													</select>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										name="frequency"
+										control={form.control}
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Frequency (if recurring)</FormLabel>
+												<FormControl>
+													<Input {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										name="tags"
+										control={form.control}
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Tags (comma separated)</FormLabel>
+												<FormControl>
+													<Input
+														{...field}
+														onChange={(e) =>
+															field.onChange(
+																e.target.value
+																	.split(",")
+																	.map((t) => t.trim())
+																	.filter(Boolean)
+															)
+														}
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										name="description"
+										control={form.control}
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Description</FormLabel>
+												<FormControl>
+													<Textarea {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										name="notes"
+										control={form.control}
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Notes</FormLabel>
+												<FormControl>
+													<Textarea {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										name="proposerName"
+										control={form.control}
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Your Name</FormLabel>
+												<FormControl>
+													<Input {...field} required />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										name="proposerEmail"
+										control={form.control}
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Your Email</FormLabel>
+												<FormControl>
+													<Input type="email" {...field} required />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										name="proposerPhone"
+										control={form.control}
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Your Phone</FormLabel>
+												<FormControl>
+													<Input {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<DialogFooter>
+										<Button
+											type="submit"
+											className="bg-green-600 hover:bg-green-700 w-full"
+											disabled={submitting}
+										>
+											{submitting ? "Submitting..." : "Submit Proposal"}
+										</Button>
+									</DialogFooter>
+									{submitError && (
+										<div className="text-red-600 text-sm mt-2">
+											{submitError}
+										</div>
+									)}
+									{submitData && (
+										<div className="text-green-600 text-sm mt-2">
+											Proposal submitted!
+										</div>
+									)}
+								</form>
+							</Form>
+						</DialogContent>
+					</Dialog>
 				</div>
 			</section>
 		</div>

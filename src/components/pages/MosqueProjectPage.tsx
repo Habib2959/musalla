@@ -73,6 +73,8 @@ export function MosqueProjectPage() {
 		projectProgress.vision ||
 		"To establish a comprehensive Islamic center that serves as a beacon of faith, Islamic knowledge and community unity.";
 	const goals = projectProgress.goals || [];
+	const prayerCapacity = projectProgress.prayerCapacity || 300;
+	const volunteerHours = projectProgress.volunteerHours || 5000;
 
 	// Icon mapping for dynamic icons from API
 	const iconMap = {
@@ -91,18 +93,18 @@ export function MosqueProjectPage() {
 		Leaf: Leaf,
 	};
 
-	const visionPoints = [
-		{
-			icon: Building2,
-			title: "Our Islamic Mission",
-			description: mission,
-		},
-		{
-			icon: Heart,
-			title: "Our Sacred Vision",
-			description: vision,
-		},
-	];
+	// const visionPoints = [
+	// 	{
+	// 		icon: Building2,
+	// 		title: "Our Islamic Mission",
+	// 		description: mission,
+	// 	},
+	// 	{
+	// 		icon: Heart,
+	// 		title: "Our Sacred Vision",
+	// 		description: vision,
+	// 	},
+	// ];
 
 	// Combined project goals and planned features with better icons
 	const projectFeaturesAndGoals =
@@ -235,37 +237,10 @@ export function MosqueProjectPage() {
 		return configs[type] || configs.card;
 	};
 
-	// Static fallback donation methods if API fails
-	const staticDonationMethods = [
-		{
-			id: "interac",
-			type: "interac",
-			title: "Interact E-Transfer",
-			description: "Send money directly from your bank account with no fees",
-			email: "nwmis.bc@gmail.com",
-			isActive: true,
-			link: "",
-			displayOrder: 1,
-		},
-		{
-			id: "paypal",
-			type: "paypal",
-			title: "PayPal",
-			description: "Pay securely with PayPal account or any credit/debit card",
-			email: "",
-			isActive: true,
-			link: "",
-			displayOrder: 2,
-		},
-	];
-
-	// Use API data with fallback to static data
-	const activeDonationMethods =
-		apiDonationMethods.length > 0
-			? apiDonationMethods
-					.filter((method) => method.isActive)
-					.sort((a, b) => a.displayOrder - b.displayOrder)
-			: staticDonationMethods;
+	// Use API data only
+	const activeDonationMethods = apiDonationMethods
+		.filter((method) => method.isActive)
+		.sort((a, b) => a.displayOrder - b.displayOrder);
 
 	return (
 		<div className="min-h-screen bg-white/95 backdrop-blur-sm relative">
@@ -289,19 +264,7 @@ export function MosqueProjectPage() {
 			<section className="py-32 bg-gradient-to-br from-green-700 via-green-600 to-green-800 text-white relative overflow-hidden min-h-[80vh] flex items-center">
 				<div className="absolute inset-0 bg-black/30"></div>
 
-				{/* Mosque Silhouette */}
-				<div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-md opacity-30">
-					<svg viewBox="0 0 400 200" className="w-full h-auto">
-						<path
-							d="M50 180 L50 120 Q50 100 70 100 L90 100 L90 80 Q90 60 110 60 L130 60 Q140 60 140 70 L140 80 L160 80 L160 50 Q160 30 180 30 L220 30 Q240 30 240 50 L240 80 L260 80 L260 70 Q260 60 270 60 L290 60 Q310 60 310 80 L310 100 L330 100 Q350 100 350 120 L350 180 Z"
-							fill="currentColor"
-						/>
-						<circle cx="200" cy="50" r="25" fill="currentColor" />
-						<rect x="190" y="25" width="20" height="30" fill="currentColor" />
-						<circle cx="120" cy="70" r="15" fill="currentColor" />
-						<circle cx="280" cy="70" r="15" fill="currentColor" />
-					</svg>
-				</div>
+				{/* ...existing code... */}
 
 				<div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
 					<h1 className="text-5xl md:text-6xl font-light mb-8 tracking-tight">
@@ -323,6 +286,24 @@ export function MosqueProjectPage() {
 								<p className="text-sm text-green-100">Marpole, Vancouver</p>
 							</div>
 						</div>
+					</div>
+
+					{/* Mosque Silhouette - after location card, new SVG */}
+					<div className="flex justify-center mt-8">
+						<svg
+							width="60"
+							height="60"
+							viewBox="0 0 200 200"
+							fill="none"
+							xmlns="http://www.w3.org/2000/svg"
+							className="w-full max-w-[80px] h-auto"
+						>
+							<path
+								d="M175 100C172.87 99.9988 170.756 100.363 168.75 101.078V100C168.75 67.3594 144.477 51.2031 126.75 39.4062C115.75 32.0781 106.25 25.7812 106.25 18.75C106.25 17.0924 105.592 15.5027 104.419 14.3306C103.247 13.1585 101.658 12.5 100 12.5C98.3424 12.5 96.7527 13.1585 95.5806 14.3306C94.4085 15.5027 93.75 17.0924 93.75 18.75C93.75 25.7812 84.25 32.0781 73.25 39.4062C55.5234 51.2031 31.25 67.3594 31.25 100V101.078C28.4224 100.078 25.3962 99.7716 22.4255 100.183C19.4547 100.595 16.6261 101.714 14.177 103.445C11.728 105.176 9.72994 107.469 8.35061 110.133C6.97129 112.796 6.25093 115.751 6.25 118.75V162.5C6.25 164.158 6.90848 165.747 8.08058 166.919C9.25268 168.092 10.8424 168.75 12.5 168.75H56.25C57.9076 168.75 59.4973 168.092 60.6694 166.919C61.8415 165.747 62.5 164.158 62.5 162.5V137.5C62.5 134.185 63.817 131.005 66.1612 128.661C68.5054 126.317 71.6848 125 75 125C78.3152 125 81.4946 126.317 83.8388 128.661C86.183 131.005 87.5 134.185 87.5 137.5V162.5C87.5 164.158 88.1585 165.747 89.3306 166.919C90.5027 168.092 92.0924 168.75 93.75 168.75H106.25C107.908 168.75 109.497 168.092 110.669 166.919C111.842 165.747 112.5 164.158 112.5 162.5V137.5C112.5 134.185 113.817 131.005 116.161 128.661C118.505 126.317 121.685 125 125 125C128.315 125 131.495 126.317 133.839 128.661C136.183 131.005 137.5 134.185 137.5 137.5V162.5C137.5 164.158 138.158 165.747 139.331 166.919C140.503 168.092 142.092 168.75 143.75 168.75H187.5C189.158 168.75 190.747 168.092 191.919 166.919C193.092 165.747 193.75 164.158 193.75 162.5V118.75C193.75 113.777 191.775 109.008 188.258 105.492C184.742 101.975 179.973 100 175 100ZM31.25 156.25H18.75V118.75C18.75 117.092 19.4085 115.503 20.5806 114.331C21.7527 113.158 23.3424 112.5 25 112.5C26.6576 112.5 28.2473 113.158 29.4194 114.331C30.5915 115.503 31.25 117.092 31.25 118.75V156.25ZM181.25 156.25H168.75V118.75C168.75 117.092 169.408 115.503 170.581 114.331C171.753 113.158 173.342 112.5 175 112.5C176.658 112.5 178.247 113.158 179.419 114.331C180.592 115.503 181.25 117.092 181.25 118.75V156.25Z"
+								fill="white"
+								fillOpacity="0.2"
+							/>
+						</svg>
 					</div>
 				</div>
 			</section>
@@ -449,6 +430,31 @@ export function MosqueProjectPage() {
 													</div>
 												</>
 											)}
+										</div>
+
+										<div className="bg-green-50 rounded-xl p-4">
+											<div className="text-2xl font-light text-green-600 mb-1">
+												{prayerCapacity ?? 100}+
+											</div>
+											<div className="text-gray-600 text-sm font-medium">
+												Prayer Capacity
+											</div>
+										</div>
+										{/* <div className="bg-red-50 rounded-xl p-4">
+											<div className="text-2xl font-light text-red-600 mb-1">
+												{}
+											</div>
+											<div className="text-gray-600 text-sm font-medium">
+												Construction Phases
+											</div>
+										</div> */}
+										<div className="bg-indigo-50 rounded-xl p-4">
+											<div className="text-2xl font-light text-indigo-600 mb-1">
+												{volunteerHours ?? 500}
+											</div>
+											<div className="text-gray-600 text-sm font-medium">
+												Volunteer Hours
+											</div>
 										</div>
 									</div>
 

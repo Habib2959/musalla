@@ -369,6 +369,13 @@ export class SupabaseContentService {
 	): Promise<ApiResponse<any>> {
 		return supabaseClient.rpc("add_contact_message", contactData);
 	}
+
+	/**
+	 * Add a new event proposal using RPC function
+	 */
+	static async addEventProposal(proposalData: any): Promise<ApiResponse<any>> {
+		return supabaseClient.rpc("add_event_proposal", proposalData);
+	}
 }
 
 // Example usage:

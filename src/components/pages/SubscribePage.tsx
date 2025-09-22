@@ -192,7 +192,7 @@ export function SubscribePage() {
 						</p>
 					</div>
 
-					<div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+					<div className="flex gap-6 mb-12 justify-center">
 						{subscriptionTypes.map((type) => (
 							<Card
 								key={type.id}
