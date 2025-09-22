@@ -14,14 +14,17 @@ import {
 	CheckCircle2,
 	ExternalLink,
 	Phone,
+	CheckCircle,
 } from "lucide-react";
 import { useApiOnMount } from "../../lib/hooks/api-hooks";
 import { SupabaseContentService } from "../../lib/services/supabase-content.service";
+import { useRouter } from "../Router";
 
 export function DonatePage() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
 	const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
+	const { navigateTo } = useRouter();
 
 	const quickAmounts = [25, 50, 100, 250, 500, 1000];
 
@@ -34,11 +37,6 @@ export function DonatePage() {
 
 	// Extract donation methods from API, with fallback
 	const apiDonationMethods = (donationData && donationData[0]?.value) || [];
-	console.log("API Donation Methods:", apiDonationMethods, {
-		donationData,
-		donationLoading,
-		donationError,
-	});
 
 	// Helper function to get icon and colors for donation methods
 	const getDonationMethodConfig = (type: string) => {
@@ -87,13 +85,10 @@ export function DonatePage() {
 		return configs[type] || configs.card;
 	};
 
-	// Use only API data for donation methods
-	const activeDonationMethods =
-		apiDonationMethods.length > 0
-			? apiDonationMethods
-					.filter((method) => method.isActive)
-					.sort((a, b) => a.displayOrder - b.displayOrder)
-			: [];
+	// Use API data only
+	const activeDonationMethods = apiDonationMethods
+		.filter((method) => method.isActive)
+		.sort((a, b) => a.displayOrder - b.displayOrder);
 
 	const handleDonateClick = (amount?: number) => {
 		setSelectedAmount(amount || null);
@@ -425,117 +420,157 @@ export function DonatePage() {
 			</section>
 
 			{/* Payment Methods Section */}
-			<section className="py-16">
+			<section className="py-20">
 				<div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-					<h2 className="text-3xl text-center text-gray-900 mb-4">
-						Multiple Ways to Give
-					</h2>
-					<p className="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-						Choose the payment method that works best for you. All donations are
-						secure and tax-deductible.
-					</p>
+					<div className="text-center mb-16">
+						<h2 className="text-4xl font-light text-gray-900 mb-6 tracking-tight">
+							Multiple Ways to Donate
+						</h2>
+						<p className="text-lg text-gray-600 max-w-2xl mx-auto">
+							Choose the donation method that works best for you. All options
+							are secure and provide instant confirmation.
+						</p>
+					</div>
 
-					<div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-						{activeDonationMethods.map((method) => {
-							const config = getDonationMethodConfig(method.type);
-							const Icon = config.icon;
-							return (
-								<Card
-									key={method.id}
-									className={`hover:shadow-lg transition-shadow ${config.borderColor}`}
-								>
-									<CardHeader>
-										<div className="flex items-center gap-3">
-											<div
-												className={`p-3 rounded-lg ${config.bgColor} ${config.textColor}`}
-											>
-												<Icon className="h-6 w-6" />
+					<div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+						{donationLoading
+							? // Loading state
+							  Array.from({ length: 3 }).map((_, index) => (
+									<Card
+										key={index}
+										className="border-2 hover:shadow-lg transition-all duration-300"
+									>
+										<CardHeader className="text-center">
+											<div className="w-16 h-16 bg-gray-200 rounded-full animate-pulse mx-auto mb-4"></div>
+											<div className="h-6 bg-gray-200 rounded animate-pulse mb-2"></div>
+											<div className="h-4 bg-gray-200 rounded animate-pulse w-24 mx-auto"></div>
+										</CardHeader>
+										<CardContent className="space-y-4">
+											<div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+											<div className="h-12 bg-gray-200 rounded animate-pulse"></div>
+											<div className="space-y-2">
+												{Array.from({ length: 4 }).map((_, i) => (
+													<div
+														key={i}
+														className="h-3 bg-gray-200 rounded animate-pulse"
+													></div>
+												))}
 											</div>
-											<div>
-												<CardTitle className="text-lg">
+										</CardContent>
+									</Card>
+							  ))
+							: activeDonationMethods.map((method) => {
+									const config = getDonationMethodConfig(method.type);
+									const IconComponent = config.icon;
+
+									return (
+										<Card
+											key={method.id}
+											className={`border-2 ${config.borderColor} hover:shadow-lg transition-all duration-300`}
+										>
+											<CardHeader className="text-center">
+												<div
+													className={`w-16 h-16 ${config.bgColor} rounded-full flex items-center justify-center mx-auto mb-4`}
+												>
+													<IconComponent
+														className={`h-8 w-8 ${config.textColor}`}
+													/>
+												</div>
+												<CardTitle className="text-xl text-gray-900">
 													{method.title}
 												</CardTitle>
 												{config.badge && (
-													<Badge
-														className={`${config.buttonColor} text-xs text-white mt-1`}
-													>
+													<Badge className={`${config.buttonColor} text-white`}>
 														{config.badge}
 													</Badge>
 												)}
-											</div>
-										</div>
-									</CardHeader>
-									<CardContent>
-										{/* Description as bullet points if multiline */}
-										{method.description && method.description.includes("\n") ? (
-											<ul className="text-gray-600 mb-4 list-disc list-inside space-y-1">
-												{method.description.split("\n").map((line, idx) => (
-													<li key={idx}>{line}</li>
-												))}
-											</ul>
-										) : (
-											<p className="text-gray-600 mb-4">{method.description}</p>
-										)}
-										{/* Email */}
-										{method.email && (
-											<div className="mb-2">
-												<span className="font-medium">Email:</span>{" "}
-												<span className="font-mono">{method.email}</span>
-											</div>
-										)}
-										{/* Link */}
-										{method.link && (
-											<div className="mb-2">
-												<a
-													href={method.link}
-													target="_blank"
-													rel="noopener noreferrer"
-													className="inline-block bg-gradient-to-r from-blue-500 to-green-500 text-white font-semibold px-5 py-2 rounded-full shadow-md hover:from-green-600 hover:to-blue-600 hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-400"
-												>
-													<span className="flex items-center gap-2">
-														<svg
-															xmlns="http://www.w3.org/2000/svg"
-															className="h-5 w-5"
-															fill="none"
-															viewBox="0 0 24 24"
-															stroke="currentColor"
-														>
-															<path
-																strokeLinecap="round"
-																strokeLinejoin="round"
-																strokeWidth={2}
-																d="M17 9V7a5 5 0 00-10 0v2a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2z"
-															/>
-															<path
-																strokeLinecap="round"
-																strokeLinejoin="round"
-																strokeWidth={2}
-																d="M12 17v.01"
-															/>
-														</svg>
-														Donate Online
-													</span>
-												</a>
-											</div>
-										)}
-										{/* Account Info */}
-										{method.accountInfo && (
-											<div className="mb-2">
-												<span className="font-medium">Account Info:</span>{" "}
-												{method.accountInfo}
-											</div>
-										)}
-										{/* Instructions */}
-										{method.instructions && (
-											<div className="mb-2">
-												<span className="font-medium">Instructions:</span>{" "}
-												{method.instructions}
-											</div>
-										)}
-									</CardContent>
-								</Card>
-							);
-						})}
+											</CardHeader>
+											<CardContent className="space-y-4">
+												<p className="text-gray-600 text-center">
+													{method.description.split("\n")[0] ||
+														method.description}
+												</p>
+
+												{/* Email display for interac type */}
+												{method.type === "interac" && method.email && (
+													<div className="bg-blue-50 rounded-lg p-4">
+														<p className="font-medium text-blue-900 mb-2 text-center">
+															Send to:
+														</p>
+														<div className="flex items-center justify-center gap-2 bg-white rounded p-3">
+															<span className="font-mono text-blue-700 text-sm">
+																{method.email}
+															</span>
+															<Button variant="outline" size="sm">
+																<Copy className="h-4 w-4" />
+															</Button>
+														</div>
+													</div>
+												)}
+
+												{/* Features list for each method */}
+												{method.description.includes("\n") ? (
+													<ul className="text-sm text-gray-600 space-y-2">
+														{method.description
+															.split("\n")
+															.slice(1)
+															.map((feature, index) => (
+																<li
+																	key={index}
+																	className="flex items-center gap-2"
+																>
+																	<CheckCircle className="h-4 w-4 text-green-600" />
+																	{feature}
+																</li>
+															))}
+													</ul>
+												) : (
+													<ul className="text-sm text-gray-600 space-y-2">
+														<li className="flex items-center gap-2">
+															<CheckCircle className="h-4 w-4 text-green-600" />
+															Secure and reliable
+														</li>
+														<li className="flex items-center gap-2">
+															<CheckCircle className="h-4 w-4 text-green-600" />
+															Instant confirmation
+														</li>
+														<li className="flex items-center gap-2">
+															<CheckCircle className="h-4 w-4 text-green-600" />
+															Tax receipt provided
+														</li>
+													</ul>
+												)}
+
+												{/* Action button */}
+												{method.link ? (
+													<Button
+														className={`w-full ${config.buttonColor} text-white`}
+														onClick={() => window.open(method.link, "_blank")}
+													>
+														{method.type === "paypal"
+															? "Donate via PayPal"
+															: `Pay with ${method.title}`}
+													</Button>
+												) : method.type === "interac" ? (
+													<Button
+														className={`w-full ${config.buttonColor} text-white`}
+														disabled
+													>
+														Use Your Banking App
+													</Button>
+												) : (
+													<Button
+														variant="outline"
+														className={`w-full border-2 ${config.textColor} hover:bg-gray-50`}
+														onClick={() => navigateTo("contact")}
+													>
+														Get Details
+													</Button>
+												)}
+											</CardContent>
+										</Card>
+									);
+							  })}
 					</div>
 				</div>
 			</section>

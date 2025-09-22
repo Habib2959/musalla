@@ -14,8 +14,16 @@ import {
 import React, { useState } from "react";
 import { SupabaseContentService } from "../../lib/services/supabase-content.service";
 import { AddContactMessageRequest } from "../../lib/types";
+import { useApiOnMount } from "../../lib/hooks/api-hooks";
 
 export function ContactPage() {
+	// Social Links API call
+	const {
+		data: socialLinksData,
+		loading: socialLinksLoading,
+		error: socialLinksError,
+	} = useApiOnMount(() => SupabaseContentService.getSocialLinks());
+
 	// Form state
 	const [formData, setFormData] = useState({
 		name: "",
@@ -402,23 +410,47 @@ export function ContactPage() {
 						Stay connected with our community through social media for updates,
 						events, and announcements.
 					</p>
-					<div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-						<Button
-							variant="outline"
-							size="lg"
-							className="border-blue-600 text-blue-600 hover:bg-blue-50 flex-1"
-						>
-							<Facebook className="h-5 w-5 mr-2" />
-							Follow us on Facebook
-						</Button>
-						<Button
-							size="lg"
-							className="bg-green-600 hover:bg-green-700 flex-1"
-						>
-							<Users className="h-5 w-5 mr-2" />
-							Join Our Community
-						</Button>
-					</div>
+					{socialLinksLoading ? (
+						<div className="text-gray-500">Loading social links...</div>
+					) : socialLinksError ? (
+						<div className="text-red-500">Unable to load social links.</div>
+					) : (
+						<div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
+							{(socialLinksData?.[0]?.value || [])
+								.filter((link: any) => link.isActive)
+								.sort((a: any, b: any) => a.displayOrder - b.displayOrder)
+								.map((link: any) => {
+									let Icon = null;
+									switch (link.type) {
+										case "facebook":
+											Icon = Facebook;
+											break;
+										case "users":
+											Icon = Users;
+											break;
+										// Add more icons as needed
+										default:
+											Icon = Facebook;
+									}
+									return (
+										<Button
+											key={link.id}
+											variant={link.type === "facebook" ? "outline" : "default"}
+											size="lg"
+											className={
+												link.type === "facebook"
+													? "border-blue-600 text-blue-600 hover:bg-blue-50 flex-1"
+													: "bg-green-600 hover:bg-green-700 flex-1 text-white"
+											}
+											onClick={() => window.open(link.link, "_blank")}
+										>
+											{Icon && <Icon className="h-5 w-5 mr-2" />}
+											{link.title || link.platform_name}
+										</Button>
+									);
+								})}
+						</div>
+					)}
 				</div>
 			</section>
 		</div>

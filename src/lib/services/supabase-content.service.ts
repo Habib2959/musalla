@@ -109,22 +109,24 @@ export interface ProjectProgress {
 export interface SocialLink {
 	id: string;
 	key: "social-links";
-	platform_name: string;
-	platform_type:
-		| "facebook"
-		| "instagram"
-		| "twitter"
-		| "youtube"
-		| "linkedin"
-		| "telegram"
-		| "whatsapp"
-		| "website";
-	url: string;
-	display_name?: string;
-	icon_name?: string;
-	display_order: number;
-	created_at: string;
-	updated_at: string;
+	value: Array<{
+		platform_name: string;
+		platform_type:
+			| "facebook"
+			| "instagram"
+			| "twitter"
+			| "youtube"
+			| "linkedin"
+			| "telegram"
+			| "whatsapp"
+			| "website";
+		url: string;
+		display_name?: string;
+		icon_name?: string;
+		display_order: number;
+		created_at: string;
+		updated_at: string;
+	}>;
 }
 
 /**
