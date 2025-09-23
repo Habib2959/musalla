@@ -19,9 +19,35 @@ export const CONTENT_KEYS = {
 	MEDIA_ITEMS: "media-items",
 	PROJECT_PROGRESS: "project-progress",
 	SOCIAL_LINKS: "social-links",
+	EDUCATIONAL_PROGRAMS: "educational-programs",
 } as const;
 
 export type ContentKey = (typeof CONTENT_KEYS)[keyof typeof CONTENT_KEYS];
+
+export interface EducationalProgram {
+	key: "educational-programs";
+	value: Array<{
+		id: string;
+		fee: number;
+		level?: string;
+		title: string;
+		isFree: boolean;
+		status: string;
+		topics: string[];
+		schedules: Array<{
+			id: string;
+			day: string;
+			timeTo: string;
+			timeFrom: string;
+		}>;
+		startDate: string;
+		description: string;
+		durationUnit: string;
+		feeFrequency: string;
+		studentCount: number;
+		durationValue: number;
+	}>;
+}
 
 /**
  * Type definitions for different content types
@@ -189,6 +215,21 @@ export class SupabaseContentService {
 		};
 
 		return supabaseClient.select<DonationMethod>(this.TABLE_NAME, {
+			filter,
+		});
+	}
+
+	/**
+	 * Get educational programs
+	 */
+	static async getEducationalPrograms(): Promise<
+		ApiResponse<EducationalProgram[]>
+	> {
+		const filter: Record<string, any> = {
+			key: { in: [CONTENT_KEYS.EDUCATIONAL_PROGRAMS] },
+		};
+
+		return supabaseClient.select<EducationalProgram>(this.TABLE_NAME, {
 			filter,
 		});
 	}

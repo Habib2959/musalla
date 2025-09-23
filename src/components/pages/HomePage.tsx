@@ -39,6 +39,15 @@ export function HomePage() {
 
 	const communityInfo = communityInfoData?.[0]?.value;
 
+	// Fetch education programs (dynamic)
+	const {
+		data: programs,
+		loading: programsLoading,
+		error: programsError,
+	} = useApiOnMount(() => SupabaseContentService.getEducationalPrograms());
+
+	const programsList = programs?.[0]?.value || [];
+
 	// Fetch project progress (dynamic)
 	const {
 		data: projectData,
@@ -502,7 +511,11 @@ export function HomePage() {
 			</section>
 
 			{/* Programs Section */}
-			<ProgramsSection />
+			<ProgramsSection
+				programs={programsList || []}
+				loading={programsLoading}
+				error={programsError}
+			/>
 
 			{/* Featured Events Preview */}
 			<EventsSection />

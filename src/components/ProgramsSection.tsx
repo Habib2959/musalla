@@ -1,74 +1,19 @@
+import type { EducationalProgram } from "../lib/services/supabase-content.service";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
-import { BookOpen, Users, Clock, Award, ArrowRight } from "lucide-react";
-import { useRouter } from "./Router";
+import { ArrowRight } from "lucide-react";
 
-export function ProgramsSection() {
-	const { navigateTo } = useRouter();
+interface ProgramsSectionProps {
+	programs: EducationalProgram["value"]; // Accepts both static and dynamic shape
+	loading: boolean;
+	error: string | null;
+}
 
-	const programs = [
-		{
-			id: 1,
-			title: `Qur’an Class for Boys`,
-			subtitle: "Beginner to Advance",
-			description: `A dedicated program for boys of all levels — including those who have never learned to read the Qur’an before — to learn Arabic reading skills and recite the Qur’an with proper tajweed. Whether starting from the alphabet, building fluency, or perfecting recitation, this class offers a supportive and encouraging environment to help every student progress with confidence and love for the Qur’an.`,
-			schedule: "Sundays, Tuesdays and Fridays 5:30 PM - 8:00 PM",
-			nextStart: "Anytime",
-			features: [
-				"Arabic alphabet",
-				"Correct pronunciation & articulation",
-				"Tajweed rules",
-				"Qur’an recitation",
-				"Qur’an memorization",
-				"Islamic reminders",
-			],
-			contact: "604-364-3260",
-		},
-		{
-			id: 5,
-			title: "Quran Class for Men",
-			subtitle: "Beginner to Advance",
-			description: `A tailored program for men of all levels — including those who have never learned to read the Qur’an before — to improve their recitation with proper tajweed.`,
-			schedule: "Mondays and Thursdays 6:00 PM - 9:30 PM",
-			nextStart: "Anytime",
-			features: ["Tajweed rules", "Qur’an recitation", "Qur’an memorization"],
-			contact: "604-364-3260",
-		},
-		{
-			id: 2,
-			title: `Qur’an Class for Women and Girls`,
-			subtitle: "Beginner to Advance",
-			description: `A welcoming and supportive program for girls and women of all levels — including those who have never learned to read the Qur’an before — offering step-by-step guidance to develop Arabic reading skills and recite the Qur’an with proper tajweed. Whether you are starting from the basics, aiming to improve fluency, or perfecting your recitation, this class provides a respectful, motivating environment to help you build confidence, deepen your connection with the Qur’an, and grow spiritually.`,
-			schedule: "Sundays and Tuesdays 6:00 PM - 8:00 PM",
-			nextStart: "Anytime",
-			features: [
-				"Arabic alphabet",
-				"Correct pronunciation & articulation",
-				"Tajweed rules",
-				"Qur’an recitation",
-				"Qur’an memorization",
-				"Islamic reminders",
-			],
-			contact: "604-214-1390",
-		},
-		{
-			id: 3,
-			title: `Arabic Language Class for Kids`,
-			subtitle: "Beginner",
-			description: `A fun and interactive class designed to help children learn Arabic from the basics. Through engaging activities, kids will develop skills in reading, writing, and speaking while building a foundation to understand the Qur’an and Islamic studies.`,
-			schedule: "Saturdays 2:00 PM - 3:30 PM",
-			nextStart: "Anytime",
-			features: [
-				"Arabic alphabet & pronunciation",
-				"Reading skills",
-				"Writing skills",
-				"Speaking skills",
-				"Building foundation for Qur’an",
-			],
-			contact: "778-710-1774",
-		},
-	];
+export function ProgramsSection({
+	programs,
+	loading,
+	error,
+}: ProgramsSectionProps) {
+	console.log({ programs, loading, error });
 
 	return (
 		<section id="programs" className="py-24 bg-white">
@@ -86,57 +31,92 @@ export function ProgramsSection() {
 				</div>
 
 				<div className="grid lg:grid-cols-2 gap-8 mb-16">
-					{programs.map((program) => (
-						<Card
-							key={program.id}
-							className="hover:shadow-lg transition-shadow"
-						>
-							<CardHeader className="pb-4">
-								<CardTitle className="text-2xl font-semibold mb-1">
-									{program.title}
-								</CardTitle>
-								{program.subtitle && (
-									<div className="text-green-700 text-base font-medium mb-2">
-										{program.subtitle}
-									</div>
-								)}
-								<p className="text-gray-700 mb-4">{program.description}</p>
-							</CardHeader>
-							<CardContent className="space-y-4">
-								<div className="space-y-2 text-sm">
-									<p>
-										<strong>Schedule:</strong> {program.schedule}
-									</p>
-									<p>
-										<strong>Start:</strong> {program.nextStart}
-									</p>
-									{program.contact && (
-										<p>
-											<strong>Contact:</strong>{" "}
-											<a
-												href={`tel:${program.contact}`}
-												className="text-green-700 underline"
-											>
-												{program.contact}
-											</a>
-										</p>
+					{loading && (
+						<div className="col-span-2 text-center text-lg text-gray-500 py-12">
+							Loading programs...
+						</div>
+					)}
+					{error && (
+						<div className="col-span-2 text-center text-red-600 py-12">
+							{error}
+						</div>
+					)}
+					{!loading && !error && (!programs || programs.length === 0) && (
+						<div className="col-span-2 text-center text-gray-500 py-12">
+							No programs found.
+						</div>
+					)}
+					{!loading &&
+						!error &&
+						programs &&
+						programs.map((program) => (
+							<Card
+								key={program?.id || program.id}
+								className="hover:shadow-lg transition-shadow"
+							>
+								<CardHeader className="pb-4">
+									<CardTitle className="text-2xl font-semibold mb-1">
+										{program?.title || program.title}
+									</CardTitle>
+									{program?.level && (
+										<div className="text-green-700 text-base font-medium mb-2">
+											{program.level}
+										</div>
 									)}
-								</div>
-
-								<div>
-									<h4 className="font-semibold mb-2">What You'll Learn:</h4>
-									<ul className="text-sm text-gray-600 space-y-1">
-										{program.features.map((feature, index) => (
-											<li key={index} className="flex items-center gap-2">
-												<ArrowRight className="h-3 w-3 text-green-600" />
-												{feature}
-											</li>
-										))}
-									</ul>
-								</div>
-							</CardContent>
-						</Card>
-					))}
+									<p className="text-gray-700 mb-4">
+										{program?.description || program.description}
+									</p>
+								</CardHeader>
+								<CardContent className="space-y-4">
+									<div className="space-y-2 text-sm">
+										<p>
+											<strong>Schedule:</strong>{" "}
+											{program?.schedules && program.schedules.length > 0
+												? program.schedules
+														.map(
+															(s: any) => `${s.day} ${s.timeFrom}-${s.timeTo}`
+														)
+														.join(", ")
+												: "TBA"}
+										</p>
+										<p>
+											<strong>Start:</strong> {program?.startDate || "TBA"}
+										</p>
+										{program?.isFree !== undefined ? (
+											<p>
+												<strong>Fee:</strong>{" "}
+												{program.isFree
+													? "Free"
+													: `$${program.fee} (${program.feeFrequency})`}
+											</p>
+										) : null}
+										{program?.status && (
+											<p>
+												<strong>Status:</strong> {program.status}
+											</p>
+										)}
+										{program?.studentCount !== undefined && (
+											<p>
+												<strong>Students:</strong> {program.studentCount}
+											</p>
+										)}
+									</div>
+									<div>
+										<h4 className="font-semibold mb-2">Topics:</h4>
+										<ul className="text-sm text-gray-600 space-y-1">
+											{(program?.topics || []).map(
+												(topic: string, index: number) => (
+													<li key={index} className="flex items-center gap-2">
+														<ArrowRight className="h-3 w-3 text-green-600" />
+														{topic}
+													</li>
+												)
+											)}
+										</ul>
+									</div>
+								</CardContent>
+							</Card>
+						))}
 				</div>
 			</div>
 		</section>
