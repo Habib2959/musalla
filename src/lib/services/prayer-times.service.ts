@@ -1,102 +1,53 @@
-import { httpClient } from "../http-client";
-import { ApiResponse, PrayerTimesResponse } from "../types";
+// services/prayer-times.service.ts
+export type PrayerTimesResponse = Record<
+	string,
+	{
+		date: string;
+		day: string;
+		month: string;
+		fajr_begins: string;
+		fajr_jamaah: string;
+		sunrise: string;
+		zuhr_begins: string;
+		zuhr_jamaah: string;
+		asr_1_begins: string;
+		asr_2_begins: string;
+		asr_jamaah: string;
+		maghrib_begins: string;
+		maghrib_jamaah: string;
+		isha_begins: string;
+		isha_jamaah: string;
+	}
+>;
 
-/**
- * Prayer Times API Service
- *
- * Example service showing how to use the generic HTTP client
- * for Islamic prayer times functionality
- */
 export class PrayerTimesService {
-	private static readonly BASE_PATH = "/prayer-times";
+	private static readonly BASE_URL =
+		"https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLhtFNdIQEFuReY61HGXZVefSA0aJVSXAoHeVP4ruRfhFplIxadYezN4IxqoRz-3_UGnrHt14QoESeX315dXZcXrV4uco8DwdaCUmmfKe0JAG1hMqLXVKP0zS-vR19MiMksLKweVqtEPUkEfgNuVKX5FzjGfuYxaFbJL-wu2FWdngVFvwonbwYke-MVlWZ4Omi13vctTc171MPZkjmzDTOn6idBXDsqnK5-xEkZJ6hNTAEodam05TJVLDsD_KxVlXBoszJeXRKZzQDcDBdwOIy9mBcE7yuGiw2-ZABCItlIlmPz5us5I4FC_A1QgB66UtLGaevX02mZmppFJE_TsTwnPlnhCTA&lib=MZTa4dDNDm9GbI1qDY7ez3SIzL_21S75a#";
 
 	/**
-	 * Get prayer times for current location
+	 * Fetch all monthly prayer times
 	 */
-	static async getCurrentPrayerTimes(
-		latitude?: number,
-		longitude?: number
-	): Promise<ApiResponse<PrayerTimesResponse>> {
-		const params: Record<string, any> = {};
-
-		if (latitude && longitude) {
-			params.lat = latitude;
-			params.lng = longitude;
+	static async getMonthlyPrayerTimes(): Promise<PrayerTimesResponse> {
+		const res = await fetch(this.BASE_URL);
+		if (!res.ok) {
+			throw new Error(`Failed to fetch prayer times: ${res.status}`);
 		}
-
-		return httpClient.get<PrayerTimesResponse>(`${this.BASE_PATH}/current`, {
-			params,
-		});
+		return res.json();
 	}
 
 	/**
-	 * Get prayer times for a specific date
+	 * Fetch today's prayer times
 	 */
-	static async getPrayerTimesByDate(
-		date: string,
-		latitude?: number,
-		longitude?: number
-	): Promise<ApiResponse<PrayerTimesResponse>> {
-		const params: Record<string, any> = { date };
+	static async getTodayPrayerTimes() {
+		const data = await this.getMonthlyPrayerTimes();
 
-		if (latitude && longitude) {
-			params.lat = latitude;
-			params.lng = longitude;
-		}
+		// Format today's key as dd/mm/yyyy
+		const today = new Date();
+		const day = String(today.getDate()).padStart(2, "0");
+		const month = String(today.getMonth() + 1).padStart(2, "0");
+		const year = today.getFullYear();
+		const todayKey = `${day}/${month}/${year}`;
 
-		return httpClient.get<PrayerTimesResponse>(`${this.BASE_PATH}/date`, {
-			params,
-		});
-	}
-
-	/**
-	 * Get prayer times for current month
-	 */
-	static async getMonthlyPrayerTimes(
-		year: number,
-		month: number,
-		latitude?: number,
-		longitude?: number
-	): Promise<ApiResponse<PrayerTimesResponse[]>> {
-		const params: Record<string, any> = { year, month };
-
-		if (latitude && longitude) {
-			params.lat = latitude;
-			params.lng = longitude;
-		}
-
-		return httpClient.get<PrayerTimesResponse[]>(`${this.BASE_PATH}/monthly`, {
-			params,
-		});
-	}
-
-	/**
-	 * Update prayer time calculation method
-	 */
-	static async updateCalculationMethod(
-		method: string
-	): Promise<ApiResponse<{ success: boolean }>> {
-		return httpClient.post(`${this.BASE_PATH}/calculation-method`, {
-			method,
-		});
+		return data[todayKey] ?? null;
 	}
 }
-
-// Example usage:
-/*
-// Get current prayer times
-try {
-  const response = await PrayerTimesService.getCurrentPrayerTimes(49.2827, -123.1207);
-  console.log('Prayer times:', response.data);
-} catch (error) {
-  console.error('Failed to fetch prayer times:', error.message);
-}
-
-// Get prayer times for specific date
-try {
-  const response = await PrayerTimesService.getPrayerTimesByDate('2024-01-15');
-  console.log('Prayer times for date:', response.data);
-} catch (error) {
-  console.error('Failed to fetch prayer times:', error.message);
-}
-*/

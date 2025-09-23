@@ -15,6 +15,7 @@ import React, { useState } from "react";
 import { SupabaseContentService } from "../../lib/services/supabase-content.service";
 import { AddContactMessageRequest } from "../../lib/types";
 import { useApiOnMount } from "../../lib/hooks/api-hooks";
+import { PrayerTimes } from "../PrayerTimes";
 
 export function ContactPage() {
 	// Social Links API call
@@ -195,44 +196,7 @@ export function ContactPage() {
 						Prayer Times & Access
 					</h2>
 					<div className="grid md:grid-cols-2 gap-8">
-						<Card>
-							<CardHeader>
-								<CardTitle className="flex items-center gap-2 text-green-700">
-									<Clock className="h-5 w-5" />
-									Daily Prayers
-								</CardTitle>
-							</CardHeader>
-							<CardContent className="space-y-3">
-								<div className="space-y-2">
-									<div className="flex justify-between">
-										<span>Fajr</span>
-										<span className="font-semibold">5:15 AM</span>
-									</div>
-									<div className="flex justify-between">
-										<span>Dhuhr</span>
-										<span className="font-semibold">12:45 PM</span>
-									</div>
-									<div className="flex justify-between">
-										<span>Asr</span>
-										<span className="font-semibold">3:45 PM</span>
-									</div>
-									<div className="flex justify-between">
-										<span>Maghrib</span>
-										<span className="font-semibold">6:15 PM</span>
-									</div>
-									<div className="flex justify-between">
-										<span>Isha</span>
-										<span className="font-semibold">7:45 PM</span>
-									</div>
-								</div>
-								<div className="border-t pt-3">
-									<div className="flex justify-between font-semibold text-green-700">
-										<span>Friday Jumu'ah</span>
-										<span>1:00 PM</span>
-									</div>
-								</div>
-							</CardContent>
-						</Card>
+						<PrayerTimes />
 
 						<Card>
 							<CardHeader>
