@@ -92,11 +92,19 @@ export function HomePage() {
 		},
 		{
 			icon: BookOpen,
+			title: "Operate an Islamic Library",
+		},
+		{
+			icon: HandHeart,
 			title: "Support Center for New Immigrants & Revert Muslims",
 		},
 		{
 			icon: Users,
 			title: "Provide funeral services for the deceased",
+		},
+		{
+			icon: Home,
+			title: "Parking Facility",
 		},
 	];
 

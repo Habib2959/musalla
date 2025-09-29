@@ -13,8 +13,6 @@ export function ProgramsSection({
 	loading,
 	error,
 }: ProgramsSectionProps) {
-	console.log({ programs, loading, error });
-
 	return (
 		<section id="programs" className="py-24 bg-white">
 			<div className="max-w-7xl mx-auto px-6">

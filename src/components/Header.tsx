@@ -40,7 +40,7 @@ export function Header() {
 	const isActive = (page: string) => currentPage === page;
 
 	return (
-		<header className="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50">
+		<header className="bg-white border-b border-gray-100 sticky top-0 z-50">
 			<div className="max-w-7xl mx-auto">
 				<div className="flex justify-between items-center h-20 px-6">
 					{" "}
@@ -53,7 +53,7 @@ export function Header() {
 						<img
 							src={logo}
 							alt="NWMIS Logo"
-							className="w-12 h-12 object-contain rounded-lg bg-white shadow"
+							className="w-12 h-12 object-contain rounded-lg bg-white"
 						/>
 						<span className="text-gray-900 font-bold tracking-tight text-2xl">
 							NWMIS
